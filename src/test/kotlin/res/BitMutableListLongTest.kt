@@ -8,14 +8,14 @@ import java.lang.IllegalArgumentException
 import java.lang.IndexOutOfBoundsException
 import java.math.BigInteger
 
-class BitMutableListTest {
+class BitMutableListLongTest {
 
-    var L: BitMutableList = BitMutableList()
+    var L: BitMutableListLong = BitMutableListLong()
     var NL = mutableListOf<Boolean>()
 
     @BeforeEach
     fun startUp() {
-        L = BitMutableList()
+        L = BitMutableListLong()
         NL = mutableListOf()
     }
 
@@ -156,7 +156,7 @@ class BitMutableListTest {
 
     @Test
     fun get() {
-        L = BitMutableList(BigInteger.valueOf(1), 2)
+        L = BitMutableListLong(1, 2)
         assert(L.get(0) == true)
         assert(L.get(1) == false)
         assertThrows(IndexOutOfBoundsException::class.java, { L.get(2) })
@@ -411,32 +411,33 @@ class BitMutableListTest {
 
 
         start = System.nanoTime()
-        for (i in 0..100){
+        for (i in 0..62){
             NL.add(true)
         }
         end = System.nanoTime()
         println(end - start)
 
         start = System.nanoTime()
-        for (i in 0..100){
+        for (i in 0..62){
             L.add(true)
         }
         end = System.nanoTime()
         println(end - start)
 
         start = System.nanoTime()
-        for (i in 0..100){
+        for (i in 0..62){
             NL.get(1)
         }
         end = System.nanoTime()
         println(end - start)
 
         start = System.nanoTime()
-        for (i in 0..100){
+        for (i in 0..62){
             L.get(1)
         }
         end = System.nanoTime()
         println(end - start)
+
 
     }
 }
