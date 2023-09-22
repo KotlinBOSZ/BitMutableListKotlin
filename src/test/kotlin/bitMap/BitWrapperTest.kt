@@ -1,21 +1,20 @@
-package res
-
-import org.junit.jupiter.api.Test
+package bitMap
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import java.lang.IllegalArgumentException
 import java.lang.IndexOutOfBoundsException
 import java.math.BigInteger
 
-class BitMutableListLongTest {
+class BitWrapperTest{
 
-    var L: BitMutableListLong = BitMutableListLong()
+    var L: BitWrapper = BitWrapper()
     var NL = mutableListOf<Boolean>()
 
     @BeforeEach
     fun startUp() {
-        L = BitMutableListLong()
+        L = BitWrapper()
         NL = mutableListOf()
     }
 
@@ -156,7 +155,9 @@ class BitMutableListLongTest {
 
     @Test
     fun get() {
-        L = BitMutableListLong(1, 2)
+        L = BitWrapper()
+        L.add(true)
+        L.add(false)
         assert(L.get(0) == true)
         assert(L.get(1) == false)
         assertThrows(IndexOutOfBoundsException::class.java, { L.get(2) })
@@ -409,34 +410,47 @@ class BitMutableListLongTest {
         var start : Long = 0
         var end : Long = 0
 
+        BitPowBigInteger.pow(100)
 
         start = System.nanoTime()
-        for (i in 0..62){
+        for (i in 0..100){
             NL.add(true)
         }
         end = System.nanoTime()
         println(end - start)
 
         start = System.nanoTime()
-        for (i in 0..62){
+        for (i in 0..100){
             L.add(true)
         }
         end = System.nanoTime()
         println(end - start)
 
         start = System.nanoTime()
-        for (i in 0..62){
+        for (i in 0..100){
             NL.get(1)
         }
         end = System.nanoTime()
         println(end - start)
 
         start = System.nanoTime()
-        for (i in 0..62){
+        for (i in 0..100){
             L.get(1)
         }
         end = System.nanoTime()
         println(end - start)
+
+        println(L.getContentBit())
+
+//        15785
+//        386432
+//        6565
+//        12781
+
+//        21161
+//        47025185
+//        7753
+//        24584
 
 
     }

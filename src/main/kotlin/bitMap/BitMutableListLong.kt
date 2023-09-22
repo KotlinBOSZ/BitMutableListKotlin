@@ -1,20 +1,26 @@
-package res
+package bitMap
 
 import java.lang.IllegalArgumentException
-import java.math.BigInteger
 import kotlin.IndexOutOfBoundsException
 
 
-class BitMutableList(var content: BigInteger = BigInteger.valueOf(0), override var size: Int = 0) :
-    MutableList<Boolean> {
+class BitMutableListLong(var content: Long = 0, override var size: Int = 0) :
+    BitMapListInterface<Int, Long, Long> {
 
-    private fun BIPow(index: Int): BigInteger = BigInteger.valueOf(2).pow(index)
+    override fun powInstance(index: Int): Long = BitPowLong.pow(index)
+//    {
+//        var long: Long = 1
+//        for (i in 0..<index) {
+//            long *= 2
+//        }
+//        return long
+//    }
 
-    private fun BI(number: Long): BigInteger = BigInteger.valueOf(number)
+    override fun getInstance(input: Long): Long = input
     override fun contains(element: Boolean): Boolean {
         if (size <= 0) return false
-        val isAllTrue = content == BI((2 * size - 1).toLong())
-        val isAllFalse = content == BI(0)
+        val isAllTrue = content == getInstance((2 * size - 1).toLong())
+        val isAllFalse = content == getInstance(0)
         return when {
             element && isAllTrue -> true
             !element && isAllTrue -> false
@@ -28,7 +34,7 @@ class BitMutableList(var content: BigInteger = BigInteger.valueOf(0), override v
 
     override fun containsAll(elements: Collection<Boolean>): Boolean = elements.toSet().all { contains(it) }
 
-    override fun add(element: Boolean): Boolean = BIPow(size).let {
+    override fun add(element: Boolean): Boolean = powInstance(size).let {
         if ((content and it) != it) {
             if (element)
                 content += it
@@ -43,14 +49,14 @@ class BitMutableList(var content: BigInteger = BigInteger.valueOf(0), override v
         when {
             index > size -> throw IndexOutOfBoundsException()
             index == size -> add(element)
-            index == 0 -> content = (content shl 1).also { size++; if (element) it + BI(1) }
+            index == 0 -> content = (content shl 1).also { size++; if (element) it + getInstance(1) }
             else -> {
                 val subList = subList(0, index)
-                if (subList is BitMutableList) {
+                if (subList is BitMutableListLong) {
                     content = (content shr index) shl index + 1
                     content += subList.content
                     if (element)
-                        content += BIPow(index)
+                        content += powInstance(index)
                     size++
                 } else
                     throw RuntimeException()
@@ -64,7 +70,7 @@ class BitMutableList(var content: BigInteger = BigInteger.valueOf(0), override v
             index == size -> addAll(elements)
             index == 0 -> {
                 content = (content shl elements.size)
-                if (elements is BitMutableList) {
+                if (elements is BitMutableListLong) {
                     content += elements.content
                     size += elements.size
                     return true
@@ -72,7 +78,7 @@ class BitMutableList(var content: BigInteger = BigInteger.valueOf(0), override v
 
                 elements.forEachIndexed { index, e ->
                     if (e)
-                        content += BIPow(index)
+                        content += powInstance(index)
                     size++
 
                 }
@@ -83,7 +89,7 @@ class BitMutableList(var content: BigInteger = BigInteger.valueOf(0), override v
                 val subList = subList(0, index)
                 content = content shr index
                 size -= index
-                if (subList is BitMutableList) {
+                if (subList is BitMutableListLong) {
                     addAll(0, elements)
                     addAll(0, subList)
                     true
@@ -97,18 +103,18 @@ class BitMutableList(var content: BigInteger = BigInteger.valueOf(0), override v
 
     override fun clear() {
         size = 0
-        content = BI(0)
+        content = getInstance(0)
     }
 
     override fun get(index: Int): Boolean =
         if (index >= size) {
             throw IndexOutOfBoundsException()
         } else {
-            BIPow(index).let { (content and it) == it }
+            powInstance(index).let { (content and it) == it }
         }
 
 
-    override fun isEmpty(): Boolean = size == 0 && content == BI(0)
+    override fun isEmpty(): Boolean = size == 0 && content == getInstance(0)
 
     override fun iterator(): MutableIterator<Boolean> = object : MutableIterator<Boolean> {
         var next = 0
@@ -118,7 +124,7 @@ class BitMutableList(var content: BigInteger = BigInteger.valueOf(0), override v
         override fun next(): Boolean {
             if (!hasNext())
                 throw NoSuchElementException()
-            val b = this@BitMutableList[next]
+            val b = this@BitMutableListLong[next]
             next++;
             isRemovable = true
             return b;
@@ -219,7 +225,7 @@ class BitMutableList(var content: BigInteger = BigInteger.valueOf(0), override v
             else -> {
                 val subList = subList(0, index)
                 val tmp = get(index)
-                if (subList is BitMutableList) {
+                if (subList is BitMutableListLong) {
                     content = (content shr index + 1)
                     size -= index + 1
                     addAll(0, subList)
@@ -236,24 +242,30 @@ class BitMutableList(var content: BigInteger = BigInteger.valueOf(0), override v
             fromIndex > toIndex -> throw IllegalArgumentException()
             toIndex > size -> throw IndexOutOfBoundsException()
             else -> {
-                BitMutableList(
-                    (content shr fromIndex) and BI(2 * (toIndex - fromIndex).toLong() - 1),
+                BitMutableListLong(
+                    (content shr fromIndex) and getInstance(2 * (toIndex - fromIndex).toLong() - 1),
                     toIndex - fromIndex
                 )
             }
         }
 
+    override fun copy(): BitMapInterface<Int, Long, Long> = BitMutableListLong(content, size)
+
+    override fun getContentBit(): Long = content
+
+    override fun getLimit(): Int = 62
+
     override fun set(index: Int, element: Boolean): Boolean =
         if (index >= size) {
             throw IndexOutOfBoundsException()
         } else {
-            if ((content and BIPow(index)) == BIPow(index)) {
+            if (get(index)) {
                 if (!element)
-                    content -= BIPow(index)
+                    content -= powInstance(index)
                 true
             } else {
                 if (element)
-                    content += BIPow(index)
+                    content += powInstance(index)
                 false
             }
         }
@@ -297,7 +309,7 @@ class BitMutableList(var content: BigInteger = BigInteger.valueOf(0), override v
     }
 
     override fun lastIndexOf(element: Boolean): Int {
-        for (i in size-1 downTo  0) {
+        for (i in size - 1 downTo 0) {
             if (get(i) == element) return i
         }
         return -1

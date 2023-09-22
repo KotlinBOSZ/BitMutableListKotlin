@@ -1,4 +1,4 @@
-package res
+package bitMap
 
 import org.junit.jupiter.api.Test
 
@@ -8,14 +8,14 @@ import java.lang.IllegalArgumentException
 import java.lang.IndexOutOfBoundsException
 import java.math.BigInteger
 
-class BitMutableListTest {
+class BitMutableListLongTest {
 
-    var L: BitMutableList = BitMutableList()
+    var L: BitMutableListLong = BitMutableListLong()
     var NL = mutableListOf<Boolean>()
 
     @BeforeEach
     fun startUp() {
-        L = BitMutableList()
+        L = BitMutableListLong()
         NL = mutableListOf()
     }
 
@@ -156,7 +156,7 @@ class BitMutableListTest {
 
     @Test
     fun get() {
-        L = BitMutableList(BigInteger.valueOf(1), 2)
+        L = BitMutableListLong(1, 2)
         assert(L.get(0) == true)
         assert(L.get(1) == false)
         assertThrows(IndexOutOfBoundsException::class.java, { L.get(2) })
@@ -406,37 +406,64 @@ class BitMutableListTest {
     @Test
     fun t() {
 
-        var start : Long = 0
-        var end : Long = 0
+        var start: Long = 0
+        var end: Long = 0
 
+        println(BitPowLong.pow(62))
 
         start = System.nanoTime()
-        for (i in 0..100){
+        for (i in 0..62) {
             NL.add(true)
         }
         end = System.nanoTime()
         println(end - start)
 
         start = System.nanoTime()
-        for (i in 0..100){
+        for (i in 0..62) {
             L.add(true)
         }
         end = System.nanoTime()
         println(end - start)
 
         start = System.nanoTime()
-        for (i in 0..100){
+        for (i in 0..62) {
             NL.get(1)
         }
         end = System.nanoTime()
         println(end - start)
 
         start = System.nanoTime()
-        for (i in 0..100){
+        for (i in 0..62) {
             L.get(1)
         }
         end = System.nanoTime()
         println(end - start)
 
+//        12007
+//        64992
+//        4747
+//        48238 bit pow
+
+
     }
-}
+    @Test
+    fun pow() {
+//        val t = generateSequence(2) { it * 2 }
+//        println( t.take(4).toList() )
+
+
+        var start: Long = 0
+        var end: Long = 0
+        println(BitPowBigInteger.pow(300))
+        start = System.nanoTime()
+        for (i in 300 downTo 0) {
+            println(BitPowBigInteger.pow(i))
+        }
+        end = System.nanoTime()
+        println(end - start)
+
+
+    }
+
+
+    }
