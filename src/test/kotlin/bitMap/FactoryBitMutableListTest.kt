@@ -7,14 +7,18 @@ import java.lang.IllegalArgumentException
 import java.lang.IndexOutOfBoundsException
 import java.math.BigInteger
 
-class BitWrapperTest{
+class FactoryBitMutableListTest {
 
-    var L: BitWrapper = BitWrapper()
+    fun create(content: Int = 0, size: Int = 0): FactoryBitMutableList<Long, BigInteger> {
+        return FactoryBitMutableList.bigIntegerImpl(BigInteger.valueOf(content.toLong()), size)
+    }
+
+    var L = create()
     var NL = mutableListOf<Boolean>()
 
     @BeforeEach
     fun startUp() {
-        L = BitWrapper()
+        L = create()
         NL = mutableListOf()
     }
 
@@ -155,9 +159,7 @@ class BitWrapperTest{
 
     @Test
     fun get() {
-        L = BitWrapper()
-        L.add(true)
-        L.add(false)
+        L = create(1, 2)
         assert(L.get(0) == true)
         assert(L.get(1) == false)
         assertThrows(IndexOutOfBoundsException::class.java, { L.get(2) })
@@ -407,51 +409,44 @@ class BitWrapperTest{
     @Test
     fun t() {
 
-        var start : Long = 0
-        var end : Long = 0
+        var start: Long = 0
+        var end: Long = 0
 
-        BitPowBigInteger.pow(100)
+        var limit: Int = 1000;
+
+        if (L.getLimit()-1 < limit&&L.getLimit()>=0){
+          limit = L.getLimit()-1
+        }
 
         start = System.nanoTime()
-        for (i in 0..100){
+        for (i in 0..limit) {
             NL.add(true)
         }
         end = System.nanoTime()
         println(end - start)
 
         start = System.nanoTime()
-        for (i in 0..100){
+        for (i in 0..limit) {
             L.add(true)
         }
         end = System.nanoTime()
         println(end - start)
 
         start = System.nanoTime()
-        for (i in 0..100){
+        for (i in 0..limit) {
             NL.get(1)
         }
         end = System.nanoTime()
         println(end - start)
 
         start = System.nanoTime()
-        for (i in 0..100){
+        for (i in 0..limit) {
             L.get(1)
         }
         end = System.nanoTime()
         println(end - start)
-
-        println(L.getContentBit())
-
-//        15785
-//        386432
-//        6565
-//        12781
-
-//        21161
-//        47025185
-//        7753
-//        24584
-
+        println(L.size)
+        println(L.content)
 
     }
 }

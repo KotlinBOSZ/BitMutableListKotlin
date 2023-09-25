@@ -4,8 +4,8 @@ interface BitMapInterface<in GET, in I, out O> {
     fun copy(): BitMapInterface<GET, I, O>
     fun getContentBit(): O
     fun getLimit(): Int
-    fun getInstance(input: I): O
-    fun powInstance(index: GET): O
+//    fun getInstance(input: I): O
+//    fun powInstance(index: GET): O
     fun add(element: Boolean): Boolean
 
     //    fun add(index: GET): Boolean TODO
