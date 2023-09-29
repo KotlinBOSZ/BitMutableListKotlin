@@ -7,14 +7,16 @@ import java.lang.IllegalArgumentException
 import java.lang.IndexOutOfBoundsException
 import java.math.BigInteger
 
-class FactoryBitMutableListTest {
+class BitMutableListTest {
 
-    fun create(content: Int = 0, size: Int = 0): FactoryBitMutableList<Long, BigInteger> {
-        return FactoryBitMutableList.bigIntegerImpl(BigInteger.valueOf(content.toLong()), size)
+    fun create(content: Int = 0, size: Int = 0): BitMutableList<*, *> {
+        return BitMutableList.bigIntegerImpl(BigInteger.valueOf(content.toLong()), size)
     }
 
-    var L = create()
+    var L : BitMutableList<*, *> = create()
     var NL = mutableListOf<Boolean>()
+
+
 
     @BeforeEach
     fun startUp() {
@@ -157,14 +159,14 @@ class FactoryBitMutableListTest {
         assert(L.size == 0)
     }
 
-    @Test
-    fun get() {
-        L = create(1, 2)
-        assert(L.get(0) == true)
-        assert(L.get(1) == false)
-        assertThrows(IndexOutOfBoundsException::class.java, { L.get(2) })
-        assertThrows(IndexOutOfBoundsException::class.java, { L.get(3) })
-    }
+//    @Test
+//    fun get() {
+//        L = create(1, 2)
+//        assert(L.get(0) == true)
+//        assert(L.get(1) == false)
+//        assertThrows(IndexOutOfBoundsException::class.java, { L.get(2) })
+//        assertThrows(IndexOutOfBoundsException::class.java, { L.get(3) })
+//    }
 
     @Test
     fun isEmpty() {

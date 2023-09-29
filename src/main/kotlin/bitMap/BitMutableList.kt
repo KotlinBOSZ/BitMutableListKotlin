@@ -4,7 +4,7 @@ import java.lang.IllegalArgumentException
 import kotlin.IndexOutOfBoundsException
 
 
-open class FactoryBitMutableList<I, O>(
+open class BitMutableList<I, O>(
     var content: O,
     val and: O.(other: O) -> O,
     val shl: O.(n: Int) -> O,
@@ -61,7 +61,7 @@ open class FactoryBitMutableList<I, O>(
             index == 0 -> content = (content.shl(1)).also { size++; if (element) it + this.getInstance(1.toInput()) }
             else -> {
                 val subList = subList(0, index)
-                if (subList is FactoryBitMutableList<*, *>) {
+                if (subList is BitMutableList<*, *>) {
                     content = (content.shr(index)).shl(index + 1)
                     content += subList.content as O
                     if (element) content += powInstance(index)
@@ -77,7 +77,7 @@ open class FactoryBitMutableList<I, O>(
             index == size -> addAll(elements)
             index == 0 -> {
                 content = (content.shl(elements.size))
-                if (elements is FactoryBitMutableList<*, *>) {
+                if (elements is BitMutableList<*, *>) {
                     content += elements.content as O
                     size += elements.size
                     return true
@@ -94,7 +94,7 @@ open class FactoryBitMutableList<I, O>(
                 val subList = subList(0, index)
                 content = content.shr(index)
                 size -= index
-                if (subList is FactoryBitMutableList<*, *>) {
+                if (subList is BitMutableList<*, *>) {
                     addAll(0, elements)
                     addAll(0, subList)
                     true
@@ -126,7 +126,7 @@ open class FactoryBitMutableList<I, O>(
 
         override fun next(): Boolean {
             if (!hasNext()) throw NoSuchElementException()
-            val b = this@FactoryBitMutableList[next]
+            val b = this@BitMutableList[next]
             next++;
             isRemovable = true
             return b;
@@ -227,7 +227,7 @@ open class FactoryBitMutableList<I, O>(
             else -> {
                 val subList = subList(0, index)
                 val tmp = get(index)
-                if (subList is FactoryBitMutableList<*, *>) {
+                if (subList is BitMutableList<*, *>) {
                     content = (content.shr(index + 1))
                     size -= index + 1
                     addAll(0, subList)
@@ -242,7 +242,7 @@ open class FactoryBitMutableList<I, O>(
         fromIndex > toIndex -> throw IllegalArgumentException()
         toIndex > size -> throw IndexOutOfBoundsException()
         else -> {
-            FactoryBitMutableList(
+            BitMutableList(
                 (content.shr(fromIndex)).and(this.getInstance((2 * (toIndex - fromIndex) - 1).toInput())),
                 and,
                 shl,
@@ -257,7 +257,7 @@ open class FactoryBitMutableList<I, O>(
         }
     }
 
-    override fun copy(): BitMapInterface<Int, I, O> = FactoryBitMutableList(
+    override fun copy(): BitMapInterface<Int, I, O> = BitMutableList(
         content, and, shl, shr, minusOperator, plusOperator, powInstance, getInstance, toInput, size
     )
 
@@ -265,6 +265,13 @@ open class FactoryBitMutableList<I, O>(
     override fun getContentBit(): O = content
 
     override fun getLimit(): Int = indexLimit
+    override fun addAt(index: Int): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun setSizeAt(index: Int) {
+        TODO("Not yet implemented")
+    }
 
     override fun set(index: Int, element: Boolean): Boolean = if (index >= size) {
         throw IndexOutOfBoundsException()

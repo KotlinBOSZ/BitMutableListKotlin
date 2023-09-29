@@ -4,11 +4,11 @@ interface BitMapInterface<in GET, in I, out O> {
     fun copy(): BitMapInterface<GET, I, O>
     fun getContentBit(): O
     fun getLimit(): Int
-//    fun getInstance(input: I): O
-//    fun powInstance(index: GET): O
-    fun add(element: Boolean): Boolean
+//    fun add(element: Boolean): Boolean
+    fun setSizeAt(index: GET)
 
-    //    fun add(index: GET): Boolean TODO
+    fun addAt(index: GET): Boolean
+
     fun get(index: GET): Boolean
     fun removeAt(index: GET): Boolean
     fun set(index: GET, element: Boolean): Boolean

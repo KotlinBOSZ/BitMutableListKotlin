@@ -8,12 +8,12 @@ operator fun <GET, I, O> BitMapInterface<GET, I, O>.minusAssign(index: GET) {
 operator fun <GET, I, O> BitMapInterface<GET, I, O>.minus(index: GET): BitMapInterface<GET, I, O> =
     this.copy().also { it -= index }
 
-operator fun <GET, I, O> BitMapInterface<GET, I, O>.plusAssign(element: Boolean) {
-    this.add(element)
-}
+//operator fun <GET, I, O> BitMapInterface<GET, I, O>.plusAssign(element: Boolean) {
+//    this.add(element)
+//}
 
-operator fun <GET, I, O> BitMapInterface<GET, I, O>.plus(element: Boolean): BitMapInterface<GET, I, O> =
-    this.copy().also { it += element }
+//operator fun <GET, I, O> BitMapInterface<GET, I, O>.plus(element: Boolean): BitMapInterface<GET, I, O> =
+//    this.copy().also { it += element }
 
 operator fun <GET, I, O> BitMapInterface<GET, I, O>.get(index: GET): Boolean = this.get(index)
 
